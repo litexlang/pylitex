@@ -2,7 +2,7 @@ import multiprocessing as mp
 import subprocess
 import re
 
-__version__ = "0.1.0"
+__version__ = "0.1.2"
 version_pat = re.compile(r"Litex Kernel: golitex (.*)")
 litex_path = "litex"
 

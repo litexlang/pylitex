@@ -11,17 +11,17 @@ After Litex core installation, you could install litex for your python environme
 ```bash
 # change your Python env to which your are using
 # then run following commands
-pip install litex
+pip install pylitex
 ```
 
 To use it:
 
 ```python
-import litex
+import pylitex
 
 # regular runner
-result = litex.run("code...")
+result = pylitex.run("code...")
 
 # multi-process runner
-results = litex.run_batch(["code1...", "code2..."], 2)
+results = pylitex.run_batch(["code1...", "code2..."], 2)
 ```
