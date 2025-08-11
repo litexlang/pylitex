@@ -1,0 +1,25 @@
+[build-system]
+requires = ["flit_core >= 3.12.0, <4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "litex"
+version = "0.1.0"
+authors = [
+  {name = "Hill Hong", email = "scanfandprintf@icloud.com"},
+]
+description = "Python api for Litex core"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Framework :: Jupyter",
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/litexlang/litex-python-api"
+Issues = "https://github.com/litexlang/litex-python-api/issues"
