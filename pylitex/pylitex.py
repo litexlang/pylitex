@@ -40,6 +40,7 @@ def run(code: str) -> str:
         return "Litex command not found. Please ensure Litex is installed and in your PATH."
 
 
+# TODO add options for running code snippets in parallel
 def run_batch(codes: list[str], max_workers: int = 1) -> list[str]:
     """Run a batch of code snippets in parallel."""
     with mp.Pool(processes=max_workers) as pool:
