@@ -19,9 +19,15 @@ To use it:
 ```python
 import pylitex
 
-# regular runner
+# run full code
 result = pylitex.run("code...")
 
-# multi-process runner
+# run full codes with multi-threads/multi-process
 results = pylitex.run_batch(["code1...", "code2..."], 2)
+
+# run continuous codes in same litex env
+litex_runner = pylitex.Runner()
+result1 = litex_runner.run("code1...")
+result2 = litex_runner.run("code2...")
+litex_runner.close()
 ```
