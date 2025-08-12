@@ -5,7 +5,7 @@ import re
 
 from .enum import RunBatchModel
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 version_pat = re.compile(r"Litex Kernel: golitex (.*)")
 litex_path = "litex"
 
