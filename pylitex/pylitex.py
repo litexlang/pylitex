@@ -7,7 +7,7 @@ from pexpect import replwrap, EOF
 
 from .enum import RunBatchModel
 
-__version__ = "0.1.5"
+__version__ = "0.1.6"
 version_pat = re.compile(r"Litex Kernel: golitex (.*)")
 litex_path = "litex"
 
@@ -132,6 +132,9 @@ class Runner:
         try:
             output = self.litexwrapper.run_command(formatted_code, timeout=None)
             return output
+        except EOF:
+            self._start_litex()
+            return "Litex REPL closed unexpectedly. REPL restarted. Environment reset."
         except Exception as e:
             return f"Error running code: {str(e)}"
 
