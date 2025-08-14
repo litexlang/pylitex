@@ -1,4 +1,4 @@
-# Python api for Litex core
+# Pylitex
 
 This is a Python api library for Litex core, which aims to help Python users to interact with Litex core.
 
