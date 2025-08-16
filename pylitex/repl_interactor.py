@@ -50,7 +50,7 @@ class Runner:
                 formatted_lines.append(line.rstrip())
         return "\n".join(formatted_lines)
 
-    def run(self, code: str) -> str:
+    def run(self, code: str) -> dict:
         """
         Run a code snippet in the Litex environment.
 
@@ -60,12 +60,15 @@ class Runner:
         formatted_code = self._code_formatter(code)
         try:
             output = self.litexwrapper.run_command(formatted_code, timeout=None)
-            return output
+            return {"truely": True, "msg": output}
         except EOF:
             self._start_litex()
-            return "\n-- Litex Environment closed unexpectedly --\n-- Environment reset --\n"
+            return {
+                "truely": False,
+                "msg": "\n-- Litex Environment closed unexpectedly --\n-- Environment reset --\n",
+            }
         except Exception as e:
-            return f"Error running code: {str(e)}"
+            return {"truely": False, "msg": str(e)}
 
     def close(self):
         """

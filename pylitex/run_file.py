@@ -4,7 +4,7 @@ import subprocess
 from .base_info import litex_path
 
 
-def run(code: str) -> str:
+def run(code: str) -> dict:
     """
     Run a code snippet in the Litex environment.
 
@@ -15,14 +15,17 @@ def run(code: str) -> str:
         result = subprocess.run(
             [litex_path, "-e", code], capture_output=True, text=True, check=True
         )
-        return result.stdout
+        return {"truely": True, "msg": result.stdout}
     except subprocess.CalledProcessError as e:
-        return f"Error: {e.stderr}"
+        return {"truely": False, "msg": e.stderr}
     except FileNotFoundError:
-        return "Litex command not found. Please ensure Litex is installed and in your PATH."
+        return {
+            "truely": False,
+            "msg": "Litex command not found. Please ensure Litex is installed and in your PATH.",
+        }
 
 
-def run_batch(codes: list[str], max_workers: int = 1) -> list[str]:
+def run_batch(codes: list[str], max_workers: int = 1) -> list[dict]:
     """
     Run a batch of code snippets in parallel.
 

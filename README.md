@@ -51,3 +51,40 @@ litex_pool.inject_code({id: "id2", code: "code5..."})
 results = litex_pool.get_results()
 litex_pool.close()
 ```
+
+### return type
+
+For `pylitex.run()` and `pylitex.Runner().run()`, the return type is a python `dict` like (Call it `pylitexResult`):
+
+```json
+{"truely": boolean, "msg": str}
+```
+
+For `pylitex.run_batch()`, the return type is a python `list[pylitexResult]` like:
+
+```json
+[
+    {"truely": boolean, "msg": str},
+    {"truely": boolean, "msg": str},
+    ...
+]
+```
+
+For `pylitex.RunnerPool().get_results()`, the return type is a python `dict[list[pylitexResult]]` like:
+
+```json
+{
+    "id1": [
+        {"truely": boolean, "msg": str},
+        {"truely": boolean, "msg": str},
+        {"truely": boolean, "msg": str},
+        ...
+    ],
+    "id2": [
+        {"truely": boolean, "msg": str},
+        {"truely": boolean, "msg": str},
+        ...
+    ],
+    ...
+}
+```
