@@ -57,15 +57,15 @@ litex_pool.close()
 For `pylitex.run()` and `pylitex.Runner().run()`, the return type is a python `dict` like (Call it `pylitexResult`):
 
 ```json
-{"truely": boolean, "payload": str, "msg": str}
+{"success": boolean, "payload": str, "message": str}
 ```
 
 For `pylitex.run_batch()`, the return type is a python `list[pylitexResult]` like:
 
 ```json
 [
-    {"truely": boolean, "payload": str, "msg": str},
-    {"truely": boolean, "payload": str, "msg": str},
+    {"success": boolean, "payload": str, "message": str},
+    {"success": boolean, "payload": str, "message": str},
     ...
 ]
 ```
@@ -75,14 +75,14 @@ For `pylitex.RunnerPool().get_results()`, the return type is a python `dict[list
 ```json
 {
     "id1": [
-        {"truely": boolean, "payload": str, "msg": str},
-        {"truely": boolean, "payload": str, "msg": str},
-        {"truely": boolean, "payload": str, "msg": str},
+        {"success": boolean, "payload": str, "message": str},
+        {"success": boolean, "payload": str, "message": str},
+        {"success": boolean, "payload": str, "message": str},
         ...
     ],
     "id2": [
-        {"truely": boolean, "payload": str, "msg": str},
-        {"truely": boolean, "payload": str, "msg": str},
+        {"success": boolean, "payload": str, "message": str},
+        {"success": boolean, "payload": str, "message": str},
         ...
     ],
     ...
