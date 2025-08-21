@@ -4,7 +4,7 @@ This is a Python api library for Litex core, which aims to help Python users to 
 
 ## installation
 
-This reuqires Litex core and Python3, you could install Litex core follow the [Installation](https://litexlang.org/doc/Installation).
+This reuqires Litex core and Python(version >= 3.12), you could install Litex core follow the [Installation](https://litexlang.org/doc/Installation).
 
 After Litex core installation, you could install litex for your python environment:
 
@@ -57,15 +57,15 @@ litex_pool.close()
 For `pylitex.run()` and `pylitex.Runner().run()`, the return type is a python `dict` like (Call it `pylitexResult`):
 
 ```json
-{"truely": boolean, "msg": str}
+{"truely": boolean, "payload": str, "msg": str}
 ```
 
 For `pylitex.run_batch()`, the return type is a python `list[pylitexResult]` like:
 
 ```json
 [
-    {"truely": boolean, "msg": str},
-    {"truely": boolean, "msg": str},
+    {"truely": boolean, "payload": str, "msg": str},
+    {"truely": boolean, "payload": str, "msg": str},
     ...
 ]
 ```
@@ -75,14 +75,14 @@ For `pylitex.RunnerPool().get_results()`, the return type is a python `dict[list
 ```json
 {
     "id1": [
-        {"truely": boolean, "msg": str},
-        {"truely": boolean, "msg": str},
-        {"truely": boolean, "msg": str},
+        {"truely": boolean, "payload": str, "msg": str},
+        {"truely": boolean, "payload": str, "msg": str},
+        {"truely": boolean, "payload": str, "msg": str},
         ...
     ],
     "id2": [
-        {"truely": boolean, "msg": str},
-        {"truely": boolean, "msg": str},
+        {"truely": boolean, "payload": str, "msg": str},
+        {"truely": boolean, "payload": str, "msg": str},
         ...
     ],
     ...
