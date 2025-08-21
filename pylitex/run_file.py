@@ -15,7 +15,11 @@ def run(code: str) -> dict:
         result = subprocess.run(
             [litex_path, "-e", code], capture_output=True, text=True, check=True
         )
-        return {"success": True, "payload": code, "message": result.stdout}
+        return {
+            "success": False if "Error" in result.stdout else True,
+            "payload": code,
+            "message": result.stdout,
+        }
     except subprocess.CalledProcessError as e:
         return {"success": False, "payload": code, "message": e.stderr}
     except FileNotFoundError:

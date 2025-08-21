@@ -60,7 +60,11 @@ class Runner:
         formatted_code = self._code_formatter(code)
         try:
             output = self.litexwrapper.run_command(formatted_code, timeout=None)
-            return {"success": True, "payload": code, "message": output}
+            return {
+                "success": False if "Error" in output else True,
+                "payload": code,
+                "message": output,
+            }
         except EOF:
             self._start_litex()
             return {
