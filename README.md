@@ -4,11 +4,12 @@ This is a Python api library for Litex core, which aims to help Python users to 
 
 ## installation
 
-This reuqires Litex core and Python(version >= 3.12), you could install Litex core follow the [Installation](https://litexlang.org/doc/Installation).
+This reuqires **Litex core** and Python(version >= 3.12), you could install Litex core follow the [Installation](https://litexlang.org/doc/Installation).
 
 After Litex core installation, you could install litex for your python environment:
 
 ```bash
+# remember to install Litex core before install pylitex
 # change your Python env to which your are using
 # then run following commands
 pip install pylitex
