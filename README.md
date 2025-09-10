@@ -2,11 +2,11 @@
 
 This is a Python api library for Litex core, which aims to help Python users to interact with Litex core.
 
-## installation
+## Installation
 
-This reuqires **Litex core** and Python(version >= 3.12), you could install Litex core follow the [Installation](https://litexlang.org/doc/Installation).
+> 💡 *Install Litex core before using `pylitex`, visit our [website](https://litexlang.org) and read the [Installation](https://litexlang.org/doc/Start) of Litex core.*
 
-After Litex core installation, you could install litex for your python environment:
+**After installing Litex core on your machine**, install `pylitex` in the same way as installing other Python packages:
 
 ```bash
 # remember to install Litex core before install pylitex
@@ -15,7 +15,13 @@ After Litex core installation, you could install litex for your python environme
 pip install pylitex
 ```
 
-## usage
+`pylitex` is under rapid development, so the version is not stable. Update `pylitex` using the following command:
+
+```bash
+pip install -U pylitex
+```
+
+## Usage
 
 Import `pylitex` as you installed.
 
@@ -23,37 +29,63 @@ Import `pylitex` as you installed.
 import pylitex
 ```
 
-### run fill code
+### Run full code
+
+`1 + 1 = 2` and `2 + 2 = 4` are examples of Litex code. You can write your own Litex code.
 
 ```python
 # run full code
-result = pylitex.run("code...")
+result = pylitex.run("1 + 1 = 2")
 
 # run full codes with multi-process
-results = pylitex.run_batch(["code1...", "code2..."], 2)
+results = pylitex.run_batch(["1 + 1 = 2", "2 + 2 = 4"], 2)
 ```
 
-### run continuous codes
+Example:
+
+```python
+import pylitex
+
+a = 1
+b = 1
+pylitex.run(str(a) + " = " + str(b))
+```
+
+### Run continuous codes
 
 ```python
 # run continuous codes in one litex env
 litex_runner = pylitex.Runner()
-result1 = litex_runner.run("code1...")
-result2 = litex_runner.run("code2...")
+result1 = litex_runner.run("1 + 1 = 2")
+result2 = litex_runner.run("2 + 2 = 4")
 litex_runner.close()
 
 # run continuous code in litex multi-process pool
 litex_pool = pylitex.RunnerPool()
-litex_pool.inject_code({id: "id1", code: "code1..."})
-litex_pool.inject_code({id: "id2", code: "code2..."})
-litex_pool.inject_code({id: "id1", code: "code3..."})
-litex_pool.inject_code({id: "id1", code: "code4..."})
-litex_pool.inject_code({id: "id2", code: "code5..."})
+litex_pool.inject_code({id: "id1", code: "1 + 1 = 2"})
+litex_pool.inject_code({id: "id2", code: "2 + 2 = 4"})
+litex_pool.inject_code({id: "id1", code: "1 + 1 = 2"})
+litex_pool.inject_code({id: "id1", code: "2 + 2 = 4"})
+litex_pool.inject_code({id: "id2", code: "2 + 2 = 4"})
 results = litex_pool.get_results()
 litex_pool.close()
 ```
 
-### return type
+Example:
+
+```python
+import pylitex
+
+runner = pylitex.Runner()
+runner.run("let a R: a = 1")
+runner.run("let b R: b = 2")
+runner.run("b = 2 * a")
+runner.close()
+```
+
+The difference between `pylitex.run()` and `pylitex.Runner().run()` is that `pylitex.run()` will start a new Litex environment for each code, while `runner = pylitex.Runner()` and use `runner.run()` will use the same Litex environment for all codes. You can execute `runner.run("clear")` to clear the Litex environment of the runner.
+
+### Return type
 
 For `pylitex.run()` and `pylitex.Runner().run()`, the return type is a python `dict` like (Call it `pylitexResult`):
 
