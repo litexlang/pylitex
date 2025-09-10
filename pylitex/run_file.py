@@ -15,13 +15,18 @@ def run(code: str) -> dict:
         result = subprocess.run(
             [litex_path, "-e", code], capture_output=True, text=True, check=True
         )
-        return {"truely": True, "msg": result.stdout}
+        return {
+            "success": False if "Error" in result.stdout else True,
+            "payload": code,
+            "message": result.stdout,
+        }
     except subprocess.CalledProcessError as e:
-        return {"truely": False, "msg": e.stderr}
+        return {"success": False, "payload": code, "message": e.stderr}
     except FileNotFoundError:
         return {
-            "truely": False,
-            "msg": "Litex command not found. Please ensure Litex is installed and in your PATH.",
+            "success": False,
+            "payload": code,
+            "message": "Litex command not found. Please ensure Litex is installed and in your PATH.",
         }
 
 
