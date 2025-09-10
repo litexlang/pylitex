@@ -4,9 +4,9 @@ This is a Python api library for Litex core, which aims to help Python users to 
 
 ## Installation
 
-> 💡 *Install Litex core before using `pylitex`, follow the [Installation](https://litexlang.org/doc/Installation) to install Litex core.*
+> 💡 *Install Litex core before using `pylitex`, visit our [website](https://litexlang.org) and read the [Installation](https://litexlang.org/doc/Start) of Litex core.*
 
-After Litex core installation, you could install `pylitex` for your python environment:
+**After installing Litex core on your machine**, install `pylitex` in the same way as installing other Python packages:
 
 ```bash
 # change your Python env to which your are using
@@ -30,12 +30,14 @@ import pylitex
 
 ### Run full code
 
+`1 + 1 = 2` and `2 + 2 = 4` are examples of Litex code. You can write your own Litex code.
+
 ```python
 # run full code
-result = pylitex.run("code...")
+result = pylitex.run("1 + 1 = 2")
 
 # run full codes with multi-process
-results = pylitex.run_batch(["code1...", "code2..."], 2)
+results = pylitex.run_batch(["1 + 1 = 2", "2 + 2 = 4"], 2)
 ```
 
 Example:
@@ -53,17 +55,17 @@ pylitex.run(str(a) + " = " + str(b))
 ```python
 # run continuous codes in one litex env
 litex_runner = pylitex.Runner()
-result1 = litex_runner.run("code1...")
-result2 = litex_runner.run("code2...")
+result1 = litex_runner.run("1 + 1 = 2")
+result2 = litex_runner.run("2 + 2 = 4")
 litex_runner.close()
 
 # run continuous code in litex multi-process pool
 litex_pool = pylitex.RunnerPool()
-litex_pool.inject_code({id: "id1", code: "code1..."})
-litex_pool.inject_code({id: "id2", code: "code2..."})
-litex_pool.inject_code({id: "id1", code: "code3..."})
-litex_pool.inject_code({id: "id1", code: "code4..."})
-litex_pool.inject_code({id: "id2", code: "code5..."})
+litex_pool.inject_code({id: "id1", code: "1 + 1 = 2"})
+litex_pool.inject_code({id: "id2", code: "2 + 2 = 4"})
+litex_pool.inject_code({id: "id1", code: "1 + 1 = 2"})
+litex_pool.inject_code({id: "id1", code: "2 + 2 = 4"})
+litex_pool.inject_code({id: "id2", code: "2 + 2 = 4"})
 results = litex_pool.get_results()
 litex_pool.close()
 ```
