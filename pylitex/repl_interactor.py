@@ -60,15 +60,20 @@ class Runner:
         formatted_code = self._code_formatter(code)
         try:
             output = self.litexwrapper.run_command(formatted_code, timeout=None)
-            return {"truely": True, "msg": output}
+            return {
+                "success": False if "Error" in output else True,
+                "payload": code,
+                "message": output,
+            }
         except EOF:
             self._start_litex()
             return {
-                "truely": False,
-                "msg": "\n-- Litex Environment closed unexpectedly --\n-- Environment reset --\n",
+                "success": False,
+                "payload": code,
+                "message": "\n-- Litex Environment closed unexpectedly --\n-- Environment reset --\n",
             }
         except Exception as e:
-            return {"truely": False, "msg": str(e)}
+            return {"success": False, "payload": code, "message": str(e)}
 
     def close(self):
         """
