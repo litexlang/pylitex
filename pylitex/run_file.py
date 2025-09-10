@@ -16,7 +16,7 @@ def run(code: str) -> dict:
             [litex_path, "-e", code], capture_output=True, text=True, check=True
         )
         return {
-            "success": False if "Error" in result.stdout else True,
+            "success": True if ":)" in result.stdout else False,
             "payload": code,
             "message": result.stdout,
         }

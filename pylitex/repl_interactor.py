@@ -61,7 +61,7 @@ class Runner:
         try:
             output = self.litexwrapper.run_command(formatted_code, timeout=None)
             return {
-                "success": False if "Error" in output else True,
+                "success": True if ":)" in output else False,
                 "payload": code,
                 "message": output,
             }
