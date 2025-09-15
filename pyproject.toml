@@ -4,9 +4,13 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "pylitex"
-version = "0.1.16"
+version = "0.1.17"
 authors = [
   {name = "Hill Hong", email = "scanfandprintf@icloud.com"},
+]
+dependencies = [
+    "pexpect >= 4.8.0",
+    "requests >= 2.22.0",
 ]
 description = "Python package for Litex core"
 readme = "README.md"
