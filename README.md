@@ -4,7 +4,7 @@ This is a Python api library for Litex core, which aims to help Python users to 
 
 ## Installation
 
-> 💡 *Install Litex core before using `pylitex`, visit our [website](https://litexlang.org) and read the [Installation](https://litexlang.org/doc/Start) of Litex core.*
+> 💡 _Install Litex core before using `pylitex`, visit our [website](https://litexlang.org) and read the [Installation](https://litexlang.org/doc/Start) of Litex core._
 
 **After installing Litex core on your machine**, install `pylitex` in the same way as installing other Python packages:
 
@@ -51,6 +51,28 @@ b = 1
 pylitex.run(str(a) + " = " + str(b))
 ```
 
+### Run full code via internet
+
+`1 + 1 = 2` and `2 + 2 = 4` are examples of Litex code. You can write your own Litex code.
+
+```python
+# run full code
+result = pylitex.run_online("1 + 1 = 2")
+
+# run full codes with multi-process
+results = pylitex.run_batch_online(["1 + 1 = 2", "2 + 2 = 4"], 2)
+```
+
+Example:
+
+```python
+import pylitex
+
+a = 1
+b = 1
+pylitex.run_online(str(a) + " = " + str(b))
+```
+
 ### Run continuous codes
 
 ```python
@@ -83,17 +105,26 @@ runner.run("b = 2 * a")
 runner.close()
 ```
 
-The difference between `pylitex.run()` and `pylitex.Runner().run()` is that `pylitex.run()` will start a new Litex environment for each code, while `runner = pylitex.Runner()` and use `runner.run()` will use the same Litex environment for all codes. You can execute `runner.run("clear")` to clear the Litex environment of the runner.
+### Compare
+
+| function                             | environment                                  | required local litex installation | multithread |
+| :----------------------------------- | :------------------------------------------- | :-------------------------------- | :---------- |
+| `pylitex.run()`                      | New environment for each code                | ✅                                | ❌          |
+| `pylitex.run_batch()`                | New environment for each code                | ✅                                | ✅          |
+| `pylitex.run_online()`               | New environment for each code                | ❌                                | ❌          |
+| `pylitex.run_batch_online()`         | New environment for each code                | ❌                                | ✅          |
+| `pylitex.Runner().run()`             | Continuous environment for all code          | ✅                                | ❌          |
+| `pylitex.RunnerPool().inject_code()` | Distribute environment for each code by `id` | ✅                                | ✅          |
 
 ### Return type
 
-For `pylitex.run()` and `pylitex.Runner().run()`, the return type is a python `dict` like (Call it `pylitexResult`):
+For `pylitex.run()`, `pulitex.run_online()` and `pylitex.Runner().run()`, the return type is a python `dict` like (Call it `pylitexResult`):
 
 ```json
 {"success": boolean, "payload": str, "message": str}
 ```
 
-For `pylitex.run_batch()`, the return type is a python `list[pylitexResult]` like:
+For `pylitex.run_batch()` and `pylitex.run_batch_online()` the return type is a python `list[pylitexResult]` like:
 
 ```json
 [
