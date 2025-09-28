@@ -19,6 +19,12 @@ A Python API library for Litex core, designed to help Python users interact with
 pip install pylitex
 ```
 
+`pylitex` is under active development. Update to the latest version:
+
+```bash
+pip install -U pylitex
+```
+
 ## Usage
 
 Import `pylitex` to get started:
@@ -53,7 +59,7 @@ print(result)
 
 #### LaTeX Conversion
 
-Convert Litex code to LaTeX format:
+Convert Litex code to LaTeX format using the `-elatex` flag:
 
 ```python
 # Convert code to LaTeX
@@ -121,24 +127,57 @@ print(f"Litex core version: {litex_version}")
 
 ## API Reference
 
-### Functions
+### Core Functions
 
-- **`run(code: str) -> dict`**: Execute Litex code locally
-- **`run_online(code: str) -> dict`**: Execute Litex code online
-- **`convert_to_latex(code: str) -> dict`**: Convert Litex code to LaTeX
-- **`get_version() -> str`**: Get pylitex version
-- **`get_litex_version() -> str`**: Get Litex core version
+#### `run(code: str) -> dict`
+Execute Litex code locally using subprocess with the `-e` flag.
+- **Parameters**: `code` - The Litex code string to execute
+- **Returns**: Dictionary with `success`, `payload`, and `message` keys
+- **Requires**: Local Litex installation
+
+#### `run_online(code: str) -> dict`
+Execute Litex code using the online Litex service at `https://litexlang.com/api/litex`.
+- **Parameters**: `code` - The Litex code string to execute
+- **Returns**: Dictionary with `success`, `payload`, and `message` keys
+- **Requires**: Internet connection
+
+#### `convert_to_latex(code: str) -> dict`
+Convert Litex code to LaTeX format using the `-elatex` flag.
+- **Parameters**: `code` - The Litex code string to convert
+- **Returns**: Dictionary with `success`, `payload`, and `message` keys
+- **Requires**: Local Litex installation
+
+### Utility Functions
+
+#### `get_version() -> str`
+Get the current version of pylitex package.
+- **Returns**: Version string (currently "0.2.0")
+
+#### `get_litex_version() -> str`
+Get the version of the installed Litex core.
+- **Returns**: Litex version string or error message
+- **Requires**: Local Litex installation with `--version` support
 
 ### Classes
 
-- **`Runner()`**: Persistent Litex execution environment
-  - `run(code: str) -> dict`: Execute code in persistent environment
-  - `close()`: Close the runner
-  
-- **`RunnerPool(max_workers: int = 1, timeout: int = 10)`**: Multi-process runner pool
+#### `Runner()`
+Persistent Litex execution environment using REPL wrapper.
+- **Methods**:
+  - `run(code: str) -> dict`: Execute code in persistent environment with automatic formatting
+  - `close()`: Close the REPL wrapper and cleanup resources
+- **Features**: Maintains state between executions, automatic environment reset on errors
+
+#### `RunnerPool(max_workers: int = 1, timeout: int = 10)`
+Multi-process runner pool for parallel execution (experimental).
+- **Parameters**:
+  - `max_workers`: Number of worker processes
+  - `timeout`: Timeout in seconds for runner operations
+- **Methods**:
   - `inject_code(code_info: dict)`: Add code to execution queue
-  - `get_results() -> dict`: Get all execution results
-  - `close()`: Close all runners
+    - `code_info` should contain `{"id": "session_id", "code": "litex_code"}`
+  - `get_results() -> dict`: Get all execution results grouped by session ID
+  - `close()`: Close all worker processes
+- **Note**: This feature is experimental and may have limitations
 
 ### Return Format
 
@@ -163,8 +202,31 @@ The library handles common errors gracefully:
 ## Requirements
 
 - Python 3.9+
+- Dependencies: `pexpect >= 4.8.0`, `requests >= 2.22.0`
 - For local execution: Litex core must be installed and accessible via `litex` command
 - For online execution: Internet connection required
+
+## Version
+
+Current version: **0.2.0**
+
+Check version programmatically:
+```python
+import pylitex
+print(f"Pylitex version: {pylitex.get_version()}")
+print(f"Litex core version: {pylitex.get_litex_version()}")
+```
+
+## Important Notes
+
+### RunnerPool Limitations
+The current `RunnerPool` implementation has some limitations:
+- The multiprocess execution is still under development
+- Some methods may not work as expected in the current version
+- For production use, consider using the `Runner` class for persistent execution
+
+### LaTeX Conversion
+The `convert_to_latex` function uses the `-elatex` flag internally to generate LaTeX output from Litex code.
 
 ## License
 

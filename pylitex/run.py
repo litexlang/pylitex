@@ -39,7 +39,7 @@ def convert_to_latex(code: str) -> dict:
     """
     try:
         result = subprocess.run(
-            [litex_path, "-latex", "-e", code],
+            [litex_path, "-elatex", code],
             capture_output=True,
             text=True,
             check=True,
