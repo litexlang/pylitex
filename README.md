@@ -1,6 +1,10 @@
 # Pylitex
 
-This is a Python api library for Litex core, which aims to help Python users to interact with Litex core.
+[![PyPI version](https://badge.fury.io/py/pylitex.svg)](https://badge.fury.io/py/pylitex)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+
+A Python API library for Litex core, designed to help Python users interact with Litex core seamlessly. This library provides both local and online execution capabilities, persistent environments, and multi-process support.
 
 ## Installation
 
@@ -15,140 +19,153 @@ This is a Python api library for Litex core, which aims to help Python users to 
 pip install pylitex
 ```
 
-`pylitex` is under rapid development, so the version is not stable. Update `pylitex` using the following command:
-
-```bash
-pip install -U pylitex
-```
-
 ## Usage
 
-Import `pylitex` as you installed.
+Import `pylitex` to get started:
 
 ```python
 import pylitex
 ```
 
-### Run full code
+### Basic Functions
 
-`1 + 1 = 2` and `2 + 2 = 4` are examples of Litex code. You can write your own Litex code.
+#### Local Execution
+
+Execute Litex code using your local Litex installation:
 
 ```python
-# run full code
+# Run a single code snippet
 result = pylitex.run("1 + 1 = 2")
-
-# run full codes with multi-process
-results = pylitex.run_batch(["1 + 1 = 2", "2 + 2 = 4"], 2)
+print(result)
+# Output: {"success": True, "payload": "1 + 1 = 2", "message": "..."}
 ```
 
-Example:
+#### Online Execution
+
+Execute Litex code using the online Litex service (no local installation required):
 
 ```python
-import pylitex
-
-a = 1
-b = 1
-pylitex.run(str(a) + " = " + str(b))
-```
-
-### Run full code via internet
-
-`1 + 1 = 2` and `2 + 2 = 4` are examples of Litex code. You can write your own Litex code.
-
-```python
-# run full code
+# Run code online
 result = pylitex.run_online("1 + 1 = 2")
-
-# run full codes with multi-process
-results = pylitex.run_batch_online(["1 + 1 = 2", "2 + 2 = 4"], 2)
+print(result)
+# Output: {"success": True, "payload": "1 + 1 = 2", "message": "..."}
 ```
 
-Example:
+#### LaTeX Conversion
+
+Convert Litex code to LaTeX format:
 
 ```python
-import pylitex
-
-a = 1
-b = 1
-pylitex.run_online(str(a) + " = " + str(b))
+# Convert code to LaTeX
+result = pylitex.convert_to_latex("1 + 1 = 2")
+print(result)
+# Output: {"success": True, "payload": "1 + 1 = 2", "message": "LaTeX output..."}
 ```
 
-### Run continuous codes
+### Persistent Execution with Runner
+
+For multiple code executions that need to maintain state:
 
 ```python
-# run continuous codes in one litex env
-litex_runner = pylitex.Runner()
-result1 = litex_runner.run("1 + 1 = 2")
-result2 = litex_runner.run("2 + 2 = 4")
-litex_runner.close()
-
-# run continuous code in litex multi-process pool
-litex_pool = pylitex.RunnerPool()
-litex_pool.inject_code({id: "id1", code: "1 + 1 = 2"})
-litex_pool.inject_code({id: "id2", code: "2 + 2 = 4"})
-litex_pool.inject_code({id: "id1", code: "1 + 1 = 2"})
-litex_pool.inject_code({id: "id1", code: "2 + 2 = 4"})
-litex_pool.inject_code({id: "id2", code: "2 + 2 = 4"})
-results = litex_pool.get_results()
-litex_pool.close()
-```
-
-Example:
-
-```python
-import pylitex
-
+# Create a persistent runner
 runner = pylitex.Runner()
-runner.run("let a R: a = 1")
-runner.run("let b R: b = 2")
-runner.run("b = 2 * a")
-runner.close()
+
+try:
+    # Variables persist between calls
+    result1 = runner.run("let a R: a = 1")
+    result2 = runner.run("let b R: b = 2")
+    result3 = runner.run("let c R: c = a + b")
+    print("Final result:", result3)
+finally:
+    runner.close()  # Always close the runner
 ```
 
-### Compare
+### Multi-Process Execution with RunnerPool
 
-| function                             | environment                                  | required local litex installation | multithread |
-| :----------------------------------- | :------------------------------------------- | :-------------------------------- | :---------- |
-| `pylitex.run()`                      | New environment for each code                | ✅                                | ❌          |
-| `pylitex.run_batch()`                | New environment for each code                | ✅                                | ✅          |
-| `pylitex.run_online()`               | New environment for each code                | ❌                                | ❌          |
-| `pylitex.run_batch_online()`         | New environment for each code                | ❌                                | ✅          |
-| `pylitex.Runner().run()`             | Continuous environment for all code          | ✅                                | ❌          |
-| `pylitex.RunnerPool().inject_code()` | Distribute environment for each code by `id` | ✅                                | ✅          |
+For parallel execution with separate environments per session:
 
-### Return type
+```python
+# Create a runner pool with 2 workers and 30-second timeout
+pool = pylitex.RunnerPool(max_workers=2, timeout=30)
 
-For `pylitex.run()`, `pulitex.run_online()` and `pylitex.Runner().run()`, the return type is a python `dict` like (Call it `pylitexResult`):
-
-```json
-{"success": boolean, "payload": str, "message": str}
+try:
+    # Each ID maintains its own environment
+    pool.inject_code({"id": "session1", "code": "let x R: x = 5"})
+    pool.inject_code({"id": "session2", "code": "let y R: y = 10"})
+    pool.inject_code({"id": "session1", "code": "let result R: result = x * 2"})
+    pool.inject_code({"id": "session2", "code": "let result R: result = y / 2"})
+    
+    # Get all results grouped by session ID
+    results = pool.get_results()
+    print("Session 1 results:", results["session1"])
+    print("Session 2 results:", results["session2"])
+finally:
+    pool.close()  # Always close the pool
 ```
 
-For `pylitex.run_batch()` and `pylitex.run_batch_online()` the return type is a python `list[pylitexResult]` like:
+### Utility Functions
 
-```json
-[
-    {"success": boolean, "payload": str, "message": str},
-    {"success": boolean, "payload": str, "message": str},
-    ...
-]
+#### Version Information
+
+Get version information for both pylitex and Litex core:
+
+```python
+# Get pylitex version
+version = pylitex.get_version()
+print(f"Pylitex version: {version}")
+
+# Get Litex core version (requires local installation)
+litex_version = pylitex.get_litex_version()
+print(f"Litex core version: {litex_version}")
 ```
 
-For `pylitex.RunnerPool().get_results()`, the return type is a python `dict[list[pylitexResult]]` like:
+## API Reference
 
-```json
+### Functions
+
+- **`run(code: str) -> dict`**: Execute Litex code locally
+- **`run_online(code: str) -> dict`**: Execute Litex code online
+- **`convert_to_latex(code: str) -> dict`**: Convert Litex code to LaTeX
+- **`get_version() -> str`**: Get pylitex version
+- **`get_litex_version() -> str`**: Get Litex core version
+
+### Classes
+
+- **`Runner()`**: Persistent Litex execution environment
+  - `run(code: str) -> dict`: Execute code in persistent environment
+  - `close()`: Close the runner
+  
+- **`RunnerPool(max_workers: int = 1, timeout: int = 10)`**: Multi-process runner pool
+  - `inject_code(code_info: dict)`: Add code to execution queue
+  - `get_results() -> dict`: Get all execution results
+  - `close()`: Close all runners
+
+### Return Format
+
+All execution functions return a dictionary with the following structure:
+
+```python
 {
-    "id1": [
-        {"success": boolean, "payload": str, "message": str},
-        {"success": boolean, "payload": str, "message": str},
-        {"success": boolean, "payload": str, "message": str},
-        ...
-    ],
-    "id2": [
-        {"success": boolean, "payload": str, "message": str},
-        {"success": boolean, "payload": str, "message": str},
-        ...
-    ],
-    ...
+    "success": bool,      # True if execution succeeded
+    "payload": str,       # The original code that was executed
+    "message": str        # Output message or error details
 }
 ```
+
+### Error Handling
+
+The library handles common errors gracefully:
+
+- **Local execution**: Returns error message if Litex core is not installed or not in PATH
+- **Online execution**: Returns error message for network issues or API failures
+- **Runner errors**: Automatically resets environment on unexpected failures
+
+## Requirements
+
+- Python 3.9+
+- For local execution: Litex core must be installed and accessible via `litex` command
+- For online execution: Internet connection required
+
+## License
+
+MIT License - see LICENSE file for details.
