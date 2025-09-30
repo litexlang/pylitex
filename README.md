@@ -6,6 +6,13 @@
 
 A Python API library for Litex core, designed to help Python users interact with Litex core seamlessly. This library provides both local and online execution capabilities, persistent environments, and multi-process support.
 
+**Features:**
+- 🚀 Local and online Litex code execution
+- 🔄 Persistent REPL environments for stateful operations  
+- ⚡ Multi-process execution pools for parallel processing
+- 📝 LaTeX conversion for mathematical expressions
+- 🛡️ Robust error handling and timeout management
+
 ## Installation
 
 > 💡 _Install Litex core before using `pylitex`, visit our [website](https://litexlang.org) and read the [Installation](https://litexlang.org/doc/Start) of Litex core._
@@ -31,6 +38,28 @@ Import `pylitex` to get started:
 
 ```python
 import pylitex
+```
+
+### Quick Start
+
+Here's a simple example to get you started quickly:
+
+```python
+import pylitex
+
+# Check if everything is working
+print("Pylitex version:", pylitex.get_version())
+
+# Try online execution (no local Litex installation required)
+result = pylitex.run_online("1 + 1 = 2")
+print("Online result:", result)
+
+# If you have Litex installed locally, try:
+try:
+    local_result = pylitex.run("1 + 1 = 2") 
+    print("Local result:", local_result)
+except:
+    print("Local Litex not available - install Litex core for local execution")
 ```
 
 ### Basic Functions
@@ -151,7 +180,7 @@ Convert Litex code to LaTeX format using the `-elatex` flag.
 
 #### `get_version() -> str`
 Get the current version of pylitex package.
-- **Returns**: Version string (currently "0.2.0")
+- **Returns**: Version string (currently "0.2.1")
 
 #### `get_litex_version() -> str`
 Get the version of the installed Litex core.
@@ -208,7 +237,12 @@ The library handles common errors gracefully:
 
 ## Version
 
-Current version: **0.2.0**
+Current version: **0.2.1**
+
+### Version History
+
+- **0.2.1**: Enhanced stability, improved error handling, updated documentation
+- **0.2.0**: Core functionality with local/online execution, REPL wrappers, and LaTeX conversion
 
 Check version programmatically:
 ```python

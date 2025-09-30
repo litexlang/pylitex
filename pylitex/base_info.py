@@ -1,16 +1,16 @@
 import re
 import subprocess
 
-__version__ = "0.2.0"
-version_pat = re.compile(r"Litex Kernel: golitex (.*)")
-litex_path = "litex"
+__VERSION__ = "0.2.1"
+LITEX_PATH = "litex"
+VERSION_PAT = re.compile(r"Litex Kernel: golitex (.*)")
 
 
 def get_version():
     """
     Get the version of this package.
     """
-    return __version__
+    return __VERSION__
 
 
 def get_litex_version():
@@ -19,9 +19,9 @@ def get_litex_version():
     """
     try:
         result = subprocess.run(
-            [litex_path, "--version"], capture_output=True, text=True, check=True
+            [LITEX_PATH, "--version"], capture_output=True, text=True, check=True
         )
-        match = version_pat.search(result.stdout)
+        match = VERSION_PAT.search(result.stdout)
         if match:
             return match.group(1)
     except subprocess.CalledProcessError as e:

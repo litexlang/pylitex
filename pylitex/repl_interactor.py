@@ -3,7 +3,7 @@ import time
 
 from pexpect import replwrap, EOF
 
-from .base_info import litex_path
+from .base_info import LITEX_PATH
 
 
 class Runner:
@@ -12,7 +12,7 @@ class Runner:
     """
 
     def __init__(self):
-        self.litex_path = litex_path
+        self.litex_path = LITEX_PATH
         self._start_litex()
 
     def _start_litex(self):
