@@ -16,7 +16,7 @@ def run(code: str) -> dict:
             [litex_path, "-e", code], capture_output=True, text=True, check=True
         )
         return {
-            "success": False if "Error" in result.stdout else True,
+            "success": is_success(result),
             "payload": code,
             "message": result.stdout,
         }
@@ -27,6 +27,12 @@ def run(code: str) -> dict:
             "success": False,
             "payload": code,
             "message": "Litex command not found. Please ensure Litex is installed and in your PATH.",
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "payload": code,
+            "message": str(e),
         }
 
 
@@ -41,3 +47,17 @@ def run_batch(codes: list[str], max_workers: int = 1) -> list[dict]:
     with mp.Pool(processes=max_workers) as pool:
         results = pool.map(run, codes)
     return results
+
+
+def is_success(result):
+    """
+    Check if the result indicates a successful execution.
+    
+    :param result: A subprocess.CompletedProcess object with stdout attribute.
+    :return: True if result.stdout (after stripping trailing whitespace) ends with ':)'.
+    """
+    # result.stdout在排除了末尾的空字符后，是以:)结尾的
+    if not result.stdout:
+        return False
+    return result.stdout.rstrip().endswith(":)")
+    

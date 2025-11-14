@@ -5,6 +5,16 @@ from pexpect import replwrap, EOF
 
 from .base_info import litex_path
 
+def is_success(result):
+    """
+    Check if the result indicates a successful execution.
+    
+    :param result: A subprocess.CompletedProcess object with stdout attribute.
+    :return: True if result.stdout (after stripping trailing whitespace) ends with ':)'.
+    """
+    if not result.stdout:
+        return False
+    return result.stdout.rstrip().endswith(":)")
 
 class Runner:
     """
@@ -61,7 +71,7 @@ class Runner:
         try:
             output = self.litexwrapper.run_command(formatted_code, timeout=None)
             return {
-                "success": False if "Error" in output else True,
+                "success": is_success(output),
                 "payload": code,
                 "message": output,
             }
